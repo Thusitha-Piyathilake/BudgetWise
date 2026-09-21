@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getDashboard, type DashboardData } from "../lib/api";
+import { useRouter } from "next/navigation";
+import {
+  getDashboard,
+  logout,
+  type DashboardData,
+} from "../lib/api";
 
 type BudgetItem = {
   name: string;
@@ -13,6 +18,8 @@ type BudgetItem = {
 };
 
 export default function Home() {
+  const router = useRouter();
+
   const [activeMenu, setActiveMenu] = useState("Dashboard");
 
   const [dashboard, setDashboard] =
@@ -21,6 +28,8 @@ export default function Home() {
   const [loading, setLoading] = useState(true);
 
   const [error, setError] = useState("");
+
+  const [loggingOut, setLoggingOut] = useState(false);
 
   useEffect(() => {
     async function loadDashboard() {
@@ -46,6 +55,20 @@ export default function Home() {
 
     loadDashboard();
   }, []);
+
+  async function handleLogout() {
+    try {
+      setLoggingOut(true);
+
+      await logout();
+    } catch (error) {
+      console.error("Logout error:", error);
+    } finally {
+      localStorage.removeItem("auth_token");
+
+      router.push("/login");
+    }
+  }
 
   const formatCurrency = (amount: number) => {
     return `LKR ${amount.toLocaleString("en-LK", {
@@ -259,6 +282,19 @@ export default function Home() {
                 {dashboard
                   ? getMonthName(dashboard.month)
                   : "Loading..."}
+              </button>
+
+              {/* Logout */}
+
+              <button
+                type="button"
+                onClick={handleLogout}
+                disabled={loggingOut}
+                className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
+              >
+                {loggingOut
+                  ? "Logging out..."
+                  : "Logout"}
               </button>
 
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#dce9df] font-semibold text-[#173b2a]">

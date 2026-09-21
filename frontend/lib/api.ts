@@ -83,3 +83,11 @@ export async function apiRequest<T>(
 export async function getDashboard(): Promise<DashboardData> {
     return apiRequest<DashboardData>("/dashboard");
 }
+
+export async function logout(): Promise<{
+    message: string;
+}> {
+    return apiRequest<{ message: string }>("/logout", {
+        method: "POST",
+    });
+}
