@@ -42,6 +42,29 @@ export type DashboardData = {
     }[];
 };
 
+export type Income = {
+    id: number;
+    user_id: number;
+    amount: string;
+    source: string;
+    date: string;
+    created_at?: string;
+    updated_at?: string;
+};
+
+export type IncomeResponse = {
+    incomes: Income[];
+};
+
+export type SingleIncomeResponse = {
+    message: string;
+    income: Income;
+};
+
+export type DeleteResponse = {
+    message: string;
+};
+
 export async function apiRequest<T>(
     endpoint: string,
     options: RequestInit = {}
@@ -90,4 +113,47 @@ export async function logout(): Promise<{
     return apiRequest<{ message: string }>("/logout", {
         method: "POST",
     });
+}
+
+export async function getIncomes(): Promise<IncomeResponse> {
+    return apiRequest<IncomeResponse>("/incomes");
+}
+
+export async function createIncome(data: {
+    amount: number;
+    source: string;
+    date: string;
+}): Promise<SingleIncomeResponse> {
+    return apiRequest<SingleIncomeResponse>("/incomes", {
+        method: "POST",
+        body: JSON.stringify(data),
+    });
+}
+
+export async function updateIncome(
+    id: number,
+    data: {
+        amount: number;
+        source: string;
+        date: string;
+    }
+): Promise<SingleIncomeResponse> {
+    return apiRequest<SingleIncomeResponse>(
+        `/incomes/${id}`,
+        {
+            method: "PUT",
+            body: JSON.stringify(data),
+        }
+    );
+}
+
+export async function deleteIncome(
+    id: number
+): Promise<DeleteResponse> {
+    return apiRequest<DeleteResponse>(
+        `/incomes/${id}`,
+        {
+            method: "DELETE",
+        }
+    );
 }

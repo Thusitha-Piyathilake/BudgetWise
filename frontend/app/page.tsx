@@ -678,9 +678,13 @@ export default function Home() {
                       + Add Expense
                     </button>
 
-                    <button className="rounded-xl border border-gray-200 px-5 py-3 text-sm font-semibold hover:bg-gray-50">
-                      + Add Income
-                    </button>
+                    <button
+  type="button"
+  onClick={() => router.push("/incomes")}
+  className="rounded-xl bg-[#173b2a] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#24543c]"
+>
+  + Add Income
+</button>
 
                   </div>
 
