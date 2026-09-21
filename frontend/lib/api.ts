@@ -1,5 +1,9 @@
 const API_BASE_URL = "http://127.0.0.1:8000/api";
 
+// =====================================================
+// Dashboard Types
+// =====================================================
+
 export type DashboardData = {
     month: string;
 
@@ -42,6 +46,32 @@ export type DashboardData = {
     }[];
 };
 
+// =====================================================
+// Category Types
+// =====================================================
+
+export type Category = {
+    id: number;
+    user_id: number;
+    name: string;
+    type: "need" | "want";
+    created_at?: string;
+    updated_at?: string;
+};
+
+export type CategoryResponse = {
+    categories: Category[];
+};
+
+export type SingleCategoryResponse = {
+    message: string;
+    category: Category;
+};
+
+// =====================================================
+// Income Types
+// =====================================================
+
 export type Income = {
     id: number;
     user_id: number;
@@ -61,9 +91,42 @@ export type SingleIncomeResponse = {
     income: Income;
 };
 
+// =====================================================
+// Expense Types
+// =====================================================
+
+export type Expense = {
+    id: number;
+    user_id: number;
+    category_id: number;
+    amount: string;
+    description: string | null;
+    date: string;
+    category?: Category;
+    created_at?: string;
+    updated_at?: string;
+};
+
+export type ExpenseResponse = {
+    expenses: Expense[];
+};
+
+export type SingleExpenseResponse = {
+    message: string;
+    expense: Expense;
+};
+
+// =====================================================
+// Common Response Types
+// =====================================================
+
 export type DeleteResponse = {
     message: string;
 };
+
+// =====================================================
+// API Request Helper
+// =====================================================
 
 export async function apiRequest<T>(
     endpoint: string,
@@ -103,9 +166,17 @@ export async function apiRequest<T>(
     return data;
 }
 
+// =====================================================
+// Dashboard API
+// =====================================================
+
 export async function getDashboard(): Promise<DashboardData> {
     return apiRequest<DashboardData>("/dashboard");
 }
+
+// =====================================================
+// Authentication API
+// =====================================================
 
 export async function logout(): Promise<{
     message: string;
@@ -114,6 +185,58 @@ export async function logout(): Promise<{
         method: "POST",
     });
 }
+
+// =====================================================
+// Category API
+// =====================================================
+
+export async function getCategories(): Promise<CategoryResponse> {
+    return apiRequest<CategoryResponse>("/categories");
+}
+
+export async function createCategory(data: {
+    name: string;
+    type: "need" | "want";
+}): Promise<SingleCategoryResponse> {
+    return apiRequest<SingleCategoryResponse>(
+        "/categories",
+        {
+            method: "POST",
+            body: JSON.stringify(data),
+        }
+    );
+}
+
+export async function updateCategory(
+    id: number,
+    data: {
+        name: string;
+        type: "need" | "want";
+    }
+): Promise<SingleCategoryResponse> {
+    return apiRequest<SingleCategoryResponse>(
+        `/categories/${id}`,
+        {
+            method: "PUT",
+            body: JSON.stringify(data),
+        }
+    );
+}
+
+export async function deleteCategory(
+    id: number
+): Promise<DeleteResponse> {
+    return apiRequest<DeleteResponse>(
+        `/categories/${id}`,
+        {
+            method: "DELETE",
+        }
+    );
+}
+
+// =====================================================
+// Income API
+// =====================================================
 
 export async function getIncomes(): Promise<IncomeResponse> {
     return apiRequest<IncomeResponse>("/incomes");
@@ -152,6 +275,58 @@ export async function deleteIncome(
 ): Promise<DeleteResponse> {
     return apiRequest<DeleteResponse>(
         `/incomes/${id}`,
+        {
+            method: "DELETE",
+        }
+    );
+}
+
+// =====================================================
+// Expense API
+// =====================================================
+
+export async function getExpenses(): Promise<ExpenseResponse> {
+    return apiRequest<ExpenseResponse>("/expenses");
+}
+
+export async function createExpense(data: {
+    category_id: number;
+    amount: number;
+    description: string;
+    date: string;
+}): Promise<SingleExpenseResponse> {
+    return apiRequest<SingleExpenseResponse>(
+        "/expenses",
+        {
+            method: "POST",
+            body: JSON.stringify(data),
+        }
+    );
+}
+
+export async function updateExpense(
+    id: number,
+    data: {
+        category_id: number;
+        amount: number;
+        description: string;
+        date: string;
+    }
+): Promise<SingleExpenseResponse> {
+    return apiRequest<SingleExpenseResponse>(
+        `/expenses/${id}`,
+        {
+            method: "PUT",
+            body: JSON.stringify(data),
+        }
+    );
+}
+
+export async function deleteExpense(
+    id: number
+): Promise<DeleteResponse> {
+    return apiRequest<DeleteResponse>(
+        `/expenses/${id}`,
         {
             method: "DELETE",
         }

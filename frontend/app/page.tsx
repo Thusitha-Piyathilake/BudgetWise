@@ -674,9 +674,13 @@ export default function Home() {
 
                   <div className="flex gap-3">
 
-                    <button className="rounded-xl bg-[#173b2a] px-5 py-3 text-sm font-semibold text-white hover:bg-[#24543c]">
-                      + Add Expense
-                    </button>
+                    <button
+  type="button"
+  onClick={() => router.push("/expenses")}
+  className="rounded-xl bg-[#173b2a] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#24543c]"
+>
+  + Add Expense
+</button>
 
                     <button
   type="button"
