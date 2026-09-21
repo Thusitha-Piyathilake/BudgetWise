@@ -5,6 +5,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\BudgetController;
+use App\Http\Controllers\SavingsGoalController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -80,4 +81,15 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/budgets', [BudgetController::class, 'store']);
     Route::put('/budgets/{budget}', [BudgetController::class, 'update']);
     Route::delete('/budgets/{budget}', [BudgetController::class, 'destroy']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Savings Goal Routes
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/savings-goals', [SavingsGoalController::class, 'index']);
+    Route::post('/savings-goals', [SavingsGoalController::class, 'store']);
+    Route::put('/savings-goals/{savingsGoal}', [SavingsGoalController::class, 'update']);
+    Route::delete('/savings-goals/{savingsGoal}', [SavingsGoalController::class, 'destroy']);
 });
