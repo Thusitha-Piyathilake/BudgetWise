@@ -224,11 +224,14 @@ export default function Home() {
                 onClick={() => {
                   setActiveMenu(item);
 
+                  if (item === "Transactions") {
+                    router.push("/transactions");
+                  }
+
                   if (item === "Budget") {
                     router.push("/budget");
                   }
 
-                  // UPDATED: Savings navigation
                   if (item === "Savings") {
                     router.push("/savings");
                   }
@@ -567,7 +570,7 @@ export default function Home() {
 
                     </div>
 
-                    {/* UPDATED: View Savings Goals navigation */}
+                    {/* View Savings Goals */}
 
                     <button
                       type="button"
@@ -599,7 +602,16 @@ export default function Home() {
                       </p>
                     </div>
 
-                    <button className="text-sm font-semibold text-[#173b2a] hover:underline">
+                    {/* UPDATED: View all navigation */}
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveMenu("Transactions");
+                        router.push("/transactions");
+                      }}
+                      className="text-sm font-semibold text-[#173b2a] hover:underline"
+                    >
                       View all
                     </button>
 

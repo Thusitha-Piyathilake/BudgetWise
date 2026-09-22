@@ -295,10 +295,13 @@ export async function createIncome(data: {
     source: string;
     date: string;
 }): Promise<SingleIncomeResponse> {
-    return apiRequest<SingleIncomeResponse>("/incomes", {
-        method: "POST",
-        body: JSON.stringify(data),
-    });
+    return apiRequest<SingleIncomeResponse>(
+        "/incomes",
+        {
+            method: "POST",
+            body: JSON.stringify(data),
+        }
+    );
 }
 
 export async function updateIncome(
