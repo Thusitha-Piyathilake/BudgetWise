@@ -172,13 +172,8 @@ export default function Home() {
           name: "Savings",
           percentage: dashboard.budget.savings_percentage,
           amount: dashboard.budget.savings_budget,
-
-          // Savings is represented by the available
-          // savings amount from the backend.
           spent: 0,
-
           remaining: dashboard.budget.savings_amount,
-
           description:
             "Emergency fund & investments",
         },
@@ -451,13 +446,17 @@ export default function Home() {
         {/* ================= SIDEBAR ================= */}
 
         <aside className="hidden w-64 border-r border-[#e5e8e1] bg-white p-6 lg:flex lg:flex-col">
+
           <div className="mb-10">
+
             <div className="flex items-center gap-2">
+
               <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#173b2a] text-xl text-white">
                 ₿
               </div>
 
               <div>
+
                 <h1 className="text-xl font-bold">
                   BudgetWise
                 </h1>
@@ -465,25 +464,36 @@ export default function Home() {
                 <p className="text-xs text-gray-500">
                   Smart money management
                 </p>
+
               </div>
+
             </div>
+
           </div>
 
           <nav className="space-y-2">
+
             {[
               "Dashboard",
               "Transactions",
+              "Recurring",
               "Budget",
               "Savings",
             ].map((item) => (
+
               <button
                 key={item}
                 type="button"
                 onClick={() => {
+
                   setActiveMenu(item);
 
                   if (item === "Transactions") {
                     router.push("/transactions");
+                  }
+
+                  if (item === "Recurring") {
+                    router.push("/recurring");
                   }
 
                   if (item === "Budget") {
@@ -493,6 +503,7 @@ export default function Home() {
                   if (item === "Savings") {
                     router.push("/savings");
                   }
+
                 }}
                 className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium transition ${
                   activeMenu === item
@@ -500,19 +511,31 @@ export default function Home() {
                     : "text-gray-500 hover:bg-gray-50 hover:text-gray-900"
                 }`}
               >
+
                 <span className="text-lg">
+
                   {item === "Dashboard" && "⌂"}
+
                   {item === "Transactions" && "↕"}
+
+                  {item === "Recurring" && "↻"}
+
                   {item === "Budget" && "◔"}
+
                   {item === "Savings" && "◉"}
+
                 </span>
 
                 {item}
+
               </button>
+
             ))}
+
           </nav>
 
           <div className="mt-auto rounded-2xl bg-[#173b2a] p-5 text-white">
+
             <p className="text-xs text-green-200">
               50 / 30 / 20 Rule
             </p>
@@ -525,7 +548,9 @@ export default function Home() {
               Keep your needs, wants and savings balanced
               every month.
             </p>
+
           </div>
+
         </aside>
 
         {/* ================= MAIN CONTENT ================= */}
@@ -535,26 +560,34 @@ export default function Home() {
           {/* Header */}
 
           <header className="flex items-center justify-between border-b border-[#e5e8e1] bg-white px-6 py-5 lg:px-10">
+
             <div>
+
               <p className="text-sm text-gray-500">
+
                 {new Date().toLocaleDateString("en-US", {
                   weekday: "long",
                   month: "long",
                   day: "numeric",
                   year: "numeric",
                 })}
+
               </p>
 
               <h2 className="mt-1 text-2xl font-bold">
                 Good evening 👋
               </h2>
+
             </div>
 
             <div className="flex items-center gap-3">
+
               <button className="hidden rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium hover:bg-gray-50 sm:block">
+
                 {dashboard
                   ? getMonthName(dashboard.month)
                   : "Loading..."}
+
               </button>
 
               {/* Logout */}
@@ -565,15 +598,19 @@ export default function Home() {
                 disabled={loggingOut}
                 className="rounded-xl border border-gray-200 bg-white px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-60"
               >
+
                 {loggingOut
                   ? "Logging out..."
                   : "Logout"}
+
               </button>
 
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#dce9df] font-semibold text-[#173b2a]">
                 TD
               </div>
+
             </div>
+
           </header>
 
           <div className="mx-auto max-w-7xl space-y-6 p-6 lg:p-10">
@@ -581,6 +618,7 @@ export default function Home() {
             {/* Welcome */}
 
             <div>
+
               <h3 className="text-3xl font-bold tracking-tight">
                 Your financial overview
               </h3>
@@ -588,22 +626,29 @@ export default function Home() {
               <p className="mt-1 text-gray-500">
                 Here&apos;s how your money is looking this month.
               </p>
+
             </div>
 
             {/* ================= LOADING ================= */}
 
             {loading && (
+
               <div className="rounded-2xl border border-[#e5e8e1] bg-white p-6">
+
                 <p className="text-sm text-gray-500">
                   Loading your financial data...
                 </p>
+
               </div>
+
             )}
 
             {/* ================= ERROR ================= */}
 
             {!loading && error && (
+
               <div className="rounded-2xl border border-red-200 bg-red-50 p-6">
+
                 <h3 className="font-semibold text-red-700">
                   Unable to load dashboard
                 </h3>
@@ -616,12 +661,15 @@ export default function Home() {
                   Make sure the Laravel API is running and you
                   are logged in.
                 </p>
+
               </div>
+
             )}
 
             {/* ================= DASHBOARD ================= */}
 
             {!loading && !error && dashboard && (
+
               <>
 
                 {/* ================= SUMMARY CARDS ================= */}
@@ -661,7 +709,9 @@ export default function Home() {
                   <div className="rounded-2xl border border-[#e5e8e1] bg-white p-6">
 
                     <div className="flex items-center justify-between">
+
                       <div>
+
                         <h3 className="text-lg font-bold">
                           50 / 30 / 20 Budget
                         </h3>
@@ -669,6 +719,7 @@ export default function Home() {
                         <p className="mt-1 text-sm text-gray-500">
                           Your monthly allocation
                         </p>
+
                       </div>
 
                       {/* Manage button */}
@@ -683,6 +734,7 @@ export default function Home() {
                       >
                         Manage
                       </button>
+
                     </div>
 
                     <div className="mt-7 space-y-6">
@@ -700,11 +752,13 @@ export default function Home() {
                             : 0;
 
                         return (
+
                           <div key={budget.name}>
 
                             <div className="flex items-end justify-between">
 
                               <div>
+
                                 <div className="flex items-center gap-2">
 
                                   <h4 className="font-semibold">
@@ -720,6 +774,7 @@ export default function Home() {
                                 <p className="mt-1 text-xs text-gray-500">
                                   {budget.description}
                                 </p>
+
                               </div>
 
                               <div className="text-right">
@@ -760,10 +815,13 @@ export default function Home() {
                             </p>
 
                           </div>
+
                         );
+
                       })}
 
                     </div>
+
                   </div>
 
                   {/* ================= SAVINGS ================= */}
@@ -842,6 +900,7 @@ export default function Home() {
                     </button>
 
                   </div>
+
                 </div>
 
                 {/* ================= ANALYTICS ================= */}
@@ -849,6 +908,7 @@ export default function Home() {
                 <div className="space-y-6">
 
                   <div>
+
                     <h3 className="text-xl font-bold">
                       Financial Analytics
                     </h3>
@@ -857,6 +917,7 @@ export default function Home() {
                       Understand your income, spending and
                       financial trends.
                     </p>
+
                   </div>
 
                   {/* Income vs Expense + Category */}
@@ -868,6 +929,7 @@ export default function Home() {
                     <div className="rounded-2xl border border-[#e5e8e1] bg-white p-6">
 
                       <div>
+
                         <h3 className="text-lg font-bold">
                           Income vs Expenses
                         </h3>
@@ -875,13 +937,16 @@ export default function Home() {
                         <p className="mt-1 text-sm text-gray-500">
                           Current month comparison
                         </p>
+
                       </div>
 
                       <div className="mt-6 h-72">
+
                         <Bar
                           data={incomeVsExpenseChartData}
                           options={barChartOptions}
                         />
+
                       </div>
 
                     </div>
@@ -891,6 +956,7 @@ export default function Home() {
                     <div className="rounded-2xl border border-[#e5e8e1] bg-white p-6">
 
                       <div>
+
                         <h3 className="text-lg font-bold">
                           Spending by Category
                         </h3>
@@ -898,6 +964,7 @@ export default function Home() {
                         <p className="mt-1 text-sm text-gray-500">
                           Where your money is going this month
                         </p>
+
                       </div>
 
                       <div className="mt-6 h-72">
@@ -905,21 +972,28 @@ export default function Home() {
                         {dashboard.analytics
                           .expense_by_category.length ===
                         0 ? (
+
                           <div className="flex h-full items-center justify-center">
+
                             <p className="text-sm text-gray-500">
                               No expense data available.
                             </p>
+
                           </div>
+
                         ) : (
+
                           <Doughnut
                             data={expenseCategoryChartData}
                             options={doughnutChartOptions}
                           />
+
                         )}
 
                       </div>
 
                     </div>
+
                   </div>
 
                   {/* Monthly Trend */}
@@ -929,6 +1003,7 @@ export default function Home() {
                     <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
 
                       <div>
+
                         <h3 className="text-lg font-bold">
                           Monthly Financial Trend
                         </h3>
@@ -937,6 +1012,7 @@ export default function Home() {
                           Income and expenses over the last
                           six months
                         </p>
+
                       </div>
 
                       <div className="rounded-lg bg-[#eef4ef] px-3 py-2 text-xs font-medium text-[#173b2a]">
@@ -946,10 +1022,12 @@ export default function Home() {
                     </div>
 
                     <div className="mt-6 h-80">
+
                       <Line
                         data={monthlyTrendChartData}
                         options={lineChartOptions}
                       />
+
                     </div>
 
                   </div>
@@ -963,6 +1041,7 @@ export default function Home() {
                   <div className="flex items-center justify-between border-b border-gray-100 p-6">
 
                     <div>
+
                       <h3 className="text-lg font-bold">
                         Recent transactions
                       </h3>
@@ -970,9 +1049,10 @@ export default function Home() {
                       <p className="mt-1 text-sm text-gray-500">
                         Your latest income and expenses
                       </p>
+
                     </div>
 
-                    {/* UPDATED: View all navigation */}
+                    {/* View all navigation */}
 
                     <button
                       type="button"
@@ -991,6 +1071,7 @@ export default function Home() {
 
                     {dashboard.recent_transactions.length ===
                     0 ? (
+
                       <div className="px-6 py-8 text-center">
 
                         <p className="text-sm text-gray-500">
@@ -998,6 +1079,7 @@ export default function Home() {
                         </p>
 
                       </div>
+
                     ) : (
 
                       dashboard.recent_transactions.map(
@@ -1013,6 +1095,7 @@ export default function Home() {
                               "Expense";
 
                           return (
+
                             <div
                               key={`${transaction.type}-${transaction.id}`}
                               className="flex items-center justify-between px-6 py-4"
@@ -1021,9 +1104,11 @@ export default function Home() {
                               <div className="flex items-center gap-4">
 
                                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-[#f0f3ef] text-lg">
+
                                   {isIncome
                                     ? "↗"
                                     : "↘"}
+
                                 </div>
 
                                 <div>
@@ -1058,13 +1143,16 @@ export default function Home() {
                               </p>
 
                             </div>
+
                           );
+
                         }
                       )
 
                     )}
 
                   </div>
+
                 </div>
 
                 {/* ================= QUICK ACTION ================= */}
@@ -1111,10 +1199,13 @@ export default function Home() {
                 </div>
 
               </>
+
             )}
 
           </div>
+
         </section>
+
       </div>
     </main>
   );
@@ -1141,6 +1232,7 @@ function SummaryCard({
           : "border-[#e5e8e1] bg-white"
       }`}
     >
+
       <div className="flex items-start justify-between">
 
         <p
