@@ -117,6 +117,30 @@ export type SingleExpenseResponse = {
 };
 
 // =====================================================
+// Budget Types
+// =====================================================
+
+export type Budget = {
+    id: number;
+    user_id: number;
+    month: string;
+    needs_percentage: string;
+    wants_percentage: string;
+    savings_percentage: string;
+    created_at?: string;
+    updated_at?: string;
+};
+
+export type BudgetResponse = {
+    budgets: Budget[];
+};
+
+export type SingleBudgetResponse = {
+    message: string;
+    budget: Budget;
+};
+
+// =====================================================
 // Common Response Types
 // =====================================================
 
@@ -327,6 +351,58 @@ export async function deleteExpense(
 ): Promise<DeleteResponse> {
     return apiRequest<DeleteResponse>(
         `/expenses/${id}`,
+        {
+            method: "DELETE",
+        }
+    );
+}
+
+// =====================================================
+// Budget API
+// =====================================================
+
+export async function getBudgets(): Promise<BudgetResponse> {
+    return apiRequest<BudgetResponse>("/budgets");
+}
+
+export async function createBudget(data: {
+    month: string;
+    needs_percentage: number;
+    wants_percentage: number;
+    savings_percentage: number;
+}): Promise<SingleBudgetResponse> {
+    return apiRequest<SingleBudgetResponse>(
+        "/budgets",
+        {
+            method: "POST",
+            body: JSON.stringify(data),
+        }
+    );
+}
+
+export async function updateBudget(
+    id: number,
+    data: {
+        month: string;
+        needs_percentage: number;
+        wants_percentage: number;
+        savings_percentage: number;
+    }
+): Promise<SingleBudgetResponse> {
+    return apiRequest<SingleBudgetResponse>(
+        `/budgets/${id}`,
+        {
+            method: "PUT",
+            body: JSON.stringify(data),
+        }
+    );
+}
+
+export async function deleteBudget(
+    id: number
+): Promise<DeleteResponse> {
+    return apiRequest<DeleteResponse>(
+        `/budgets/${id}`,
         {
             method: "DELETE",
         }

@@ -220,7 +220,14 @@ export default function Home() {
             ].map((item) => (
               <button
                 key={item}
-                onClick={() => setActiveMenu(item)}
+                type="button"
+                onClick={() => {
+                  setActiveMenu(item);
+
+                  if (item === "Budget") {
+                    router.push("/budget");
+                  }
+                }}
                 className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium transition ${
                   activeMenu === item
                     ? "bg-[#e8f1eb] text-[#173b2a]"
@@ -398,7 +405,15 @@ export default function Home() {
                         </p>
                       </div>
 
-                      <button className="rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium hover:bg-gray-50">
+                      {/* UPDATED: Manage button */}
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setActiveMenu("Budget");
+                          router.push("/budget");
+                        }}
+                        className="rounded-lg border border-gray-200 px-3 py-2 text-xs font-medium hover:bg-gray-50"
+                      >
                         Manage
                       </button>
                     </div>
@@ -675,20 +690,24 @@ export default function Home() {
                   <div className="flex gap-3">
 
                     <button
-  type="button"
-  onClick={() => router.push("/expenses")}
-  className="rounded-xl bg-[#173b2a] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#24543c]"
->
-  + Add Expense
-</button>
+                      type="button"
+                      onClick={() =>
+                        router.push("/expenses")
+                      }
+                      className="rounded-xl bg-[#173b2a] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#24543c]"
+                    >
+                      + Add Expense
+                    </button>
 
                     <button
-  type="button"
-  onClick={() => router.push("/incomes")}
-  className="rounded-xl bg-[#173b2a] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#24543c]"
->
-  + Add Income
-</button>
+                      type="button"
+                      onClick={() =>
+                        router.push("/incomes")
+                      }
+                      className="rounded-xl bg-[#173b2a] px-4 py-3 text-sm font-semibold text-white transition hover:bg-[#24543c]"
+                    >
+                      + Add Income
+                    </button>
 
                   </div>
 
