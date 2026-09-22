@@ -174,6 +174,78 @@ class DashboardController extends Controller
 
         /*
         |--------------------------------------------------------------------------
+        | Analytics - Income vs Expense
+        |--------------------------------------------------------------------------
+        |
+        | Uses the same current-month values already calculated above.
+        | This does not change the existing calculations.
+        |
+        */
+
+        $incomeVsExpense = [
+            'income' => (float) $monthlyIncome,
+            'expenses' => (float) $monthlyExpenses,
+        ];
+
+        /*
+        |--------------------------------------------------------------------------
+        | Analytics - Expense By Category
+        |--------------------------------------------------------------------------
+        |
+        | Gets current-month expenses grouped by category.
+        |
+        */
+
+        $expenseByCategory = $user->expenses()
+            ->with('category')
+            ->whereRaw("DATE_FORMAT(date, '%Y-%m') = ?", [$currentMonth])
+            ->get()
+            ->groupBy(function ($expense) {
+                return $expense->category?->name ?? 'Uncategorized';
+            })
+            ->map(function ($expenses, $categoryName) {
+                return [
+                    'category' => $categoryName,
+                    'amount' => round(
+                        $expenses->sum('amount'),
+                        2
+                    ),
+                ];
+            })
+            ->values();
+
+        /*
+        |--------------------------------------------------------------------------
+        | Analytics - Monthly Income vs Expense Trend
+        |--------------------------------------------------------------------------
+        |
+        | Provides the current month and previous 5 months.
+        |
+        */
+
+        $monthlyTrend = collect();
+
+        for ($i = 5; $i >= 0; $i--) {
+            $monthDate = now()->subMonths($i);
+            $month = $monthDate->format('Y-m');
+
+            $income = $user->incomes()
+                ->whereRaw("DATE_FORMAT(date, '%Y-%m') = ?", [$month])
+                ->sum('amount');
+
+            $expenses = $user->expenses()
+                ->whereRaw("DATE_FORMAT(date, '%Y-%m') = ?", [$month])
+                ->sum('amount');
+
+            $monthlyTrend->push([
+                'month' => $month,
+                'income' => (float) $income,
+                'expenses' => (float) $expenses,
+            ]);
+        }
+
+        /*
+        |--------------------------------------------------------------------------
         | Response
         |--------------------------------------------------------------------------
         */
@@ -199,6 +271,20 @@ class DashboardController extends Controller
                 'needs_spent' => (float) $needsSpent,
                 'wants_spent' => (float) $wantsSpent,
                 'savings_amount' => round($savingsAmount, 2),
+            ],
+
+            /*
+            |--------------------------------------------------------------------------
+            | Analytics
+            |--------------------------------------------------------------------------
+            */
+
+            'analytics' => [
+                'income_vs_expense' => $incomeVsExpense,
+
+                'expense_by_category' => $expenseByCategory,
+
+                'monthly_trend' => $monthlyTrend,
             ],
 
             'savings_goals' => $savingsGoals,

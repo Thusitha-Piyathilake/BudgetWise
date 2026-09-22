@@ -2,11 +2,37 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  ArcElement,
+  Tooltip,
+  Legend,
+} from "chart.js";
+
+import { Bar, Doughnut, Line } from "react-chartjs-2";
+
 import {
   getDashboard,
   logout,
   type DashboardData,
 } from "../lib/api";
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  PointElement,
+  LineElement,
+  ArcElement,
+  Tooltip,
+  Legend
+);
 
 type BudgetItem = {
   name: string;
@@ -100,6 +126,20 @@ export default function Home() {
     });
   };
 
+  const getShortMonthName = (month: string) => {
+    const [year, monthNumber] = month.split("-");
+
+    const date = new Date(
+      Number(year),
+      Number(monthNumber) - 1,
+      1
+    );
+
+    return date.toLocaleDateString("en-US", {
+      month: "short",
+    });
+  };
+
   const budgetData: BudgetItem[] = dashboard
     ? [
         {
@@ -185,6 +225,224 @@ export default function Home() {
           (availableBalance / monthlyIncome) * 100
         )
       : 0;
+
+  /*
+  |--------------------------------------------------------------------------
+  | Analytics Data
+  |--------------------------------------------------------------------------
+  */
+
+  const incomeVsExpenseChartData = dashboard
+    ? {
+        labels: ["Income", "Expenses"],
+        datasets: [
+          {
+            label: "Amount",
+            data: [
+              dashboard.analytics.income_vs_expense.income,
+              dashboard.analytics.income_vs_expense.expenses,
+            ],
+            backgroundColor: [
+              "#173b2a",
+              "#d9e5dc",
+            ],
+            borderRadius: 8,
+            borderSkipped: false,
+          },
+        ],
+      }
+    : {
+        labels: [],
+        datasets: [],
+      };
+
+  const expenseCategoryChartData = dashboard
+    ? {
+        labels:
+          dashboard.analytics.expense_by_category.map(
+            (item) => item.category
+          ),
+        datasets: [
+          {
+            label: "Expenses",
+            data:
+              dashboard.analytics.expense_by_category.map(
+                (item) => item.amount
+              ),
+            backgroundColor: [
+              "#173b2a",
+              "#3f6b52",
+              "#6f927d",
+              "#9db5a5",
+              "#c6d6cc",
+              "#dce9df",
+            ],
+            borderWidth: 0,
+          },
+        ],
+      }
+    : {
+        labels: [],
+        datasets: [],
+      };
+
+  const monthlyTrendChartData = dashboard
+    ? {
+        labels:
+          dashboard.analytics.monthly_trend.map(
+            (item) =>
+              getShortMonthName(item.month)
+          ),
+        datasets: [
+          {
+            label: "Income",
+            data:
+              dashboard.analytics.monthly_trend.map(
+                (item) => item.income
+              ),
+            borderColor: "#173b2a",
+            backgroundColor: "#173b2a",
+            tension: 0.35,
+            borderWidth: 3,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+          },
+          {
+            label: "Expenses",
+            data:
+              dashboard.analytics.monthly_trend.map(
+                (item) => item.expenses
+              ),
+            borderColor: "#9aa89f",
+            backgroundColor: "#9aa89f",
+            tension: 0.35,
+            borderWidth: 3,
+            pointRadius: 4,
+            pointHoverRadius: 6,
+          },
+        ],
+      }
+    : {
+        labels: [],
+        datasets: [],
+      };
+
+  /*
+  |--------------------------------------------------------------------------
+  | Analytics Chart Options
+  |--------------------------------------------------------------------------
+  */
+
+  const barChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: {
+        display: false,
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context: any) {
+            return ` LKR ${Number(
+              context.raw
+            ).toLocaleString("en-LK")}`;
+          },
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: function (value: any) {
+            return `LKR ${Number(
+              value
+            ).toLocaleString("en-LK")}`;
+          },
+        },
+        grid: {
+          color: "#edf0ec",
+        },
+      },
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+    },
+  };
+
+  const doughnutChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    cutout: "68%",
+    plugins: {
+      legend: {
+        position: "bottom" as const,
+        labels: {
+          usePointStyle: true,
+          padding: 18,
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context: any) {
+            return ` LKR ${Number(
+              context.raw
+            ).toLocaleString("en-LK")}`;
+          },
+        },
+      },
+    },
+  };
+
+  const lineChartOptions = {
+    responsive: true,
+    maintainAspectRatio: false,
+    interaction: {
+      mode: "index" as const,
+      intersect: false,
+    },
+    plugins: {
+      legend: {
+        position: "top" as const,
+        align: "end" as const,
+        labels: {
+          usePointStyle: true,
+          padding: 18,
+        },
+      },
+      tooltip: {
+        callbacks: {
+          label: function (context: any) {
+            return ` ${context.dataset.label}: LKR ${Number(
+              context.raw
+            ).toLocaleString("en-LK")}`;
+          },
+        },
+      },
+    },
+    scales: {
+      y: {
+        beginAtZero: true,
+        ticks: {
+          callback: function (value: any) {
+            return `LKR ${Number(
+              value
+            ).toLocaleString("en-LK")}`;
+          },
+        },
+        grid: {
+          color: "#edf0ec",
+        },
+      },
+      x: {
+        grid: {
+          display: false,
+        },
+      },
+    },
+  };
 
   return (
     <main className="min-h-screen bg-[#f7f8f5] text-[#172117]">
@@ -584,6 +842,118 @@ export default function Home() {
                     </button>
 
                   </div>
+                </div>
+
+                {/* ================= ANALYTICS ================= */}
+
+                <div className="space-y-6">
+
+                  <div>
+                    <h3 className="text-xl font-bold">
+                      Financial Analytics
+                    </h3>
+
+                    <p className="mt-1 text-sm text-gray-500">
+                      Understand your income, spending and
+                      financial trends.
+                    </p>
+                  </div>
+
+                  {/* Income vs Expense + Category */}
+
+                  <div className="grid gap-6 xl:grid-cols-2">
+
+                    {/* Income vs Expense */}
+
+                    <div className="rounded-2xl border border-[#e5e8e1] bg-white p-6">
+
+                      <div>
+                        <h3 className="text-lg font-bold">
+                          Income vs Expenses
+                        </h3>
+
+                        <p className="mt-1 text-sm text-gray-500">
+                          Current month comparison
+                        </p>
+                      </div>
+
+                      <div className="mt-6 h-72">
+                        <Bar
+                          data={incomeVsExpenseChartData}
+                          options={barChartOptions}
+                        />
+                      </div>
+
+                    </div>
+
+                    {/* Expense By Category */}
+
+                    <div className="rounded-2xl border border-[#e5e8e1] bg-white p-6">
+
+                      <div>
+                        <h3 className="text-lg font-bold">
+                          Spending by Category
+                        </h3>
+
+                        <p className="mt-1 text-sm text-gray-500">
+                          Where your money is going this month
+                        </p>
+                      </div>
+
+                      <div className="mt-6 h-72">
+
+                        {dashboard.analytics
+                          .expense_by_category.length ===
+                        0 ? (
+                          <div className="flex h-full items-center justify-center">
+                            <p className="text-sm text-gray-500">
+                              No expense data available.
+                            </p>
+                          </div>
+                        ) : (
+                          <Doughnut
+                            data={expenseCategoryChartData}
+                            options={doughnutChartOptions}
+                          />
+                        )}
+
+                      </div>
+
+                    </div>
+                  </div>
+
+                  {/* Monthly Trend */}
+
+                  <div className="rounded-2xl border border-[#e5e8e1] bg-white p-6">
+
+                    <div className="flex flex-col justify-between gap-2 sm:flex-row sm:items-center">
+
+                      <div>
+                        <h3 className="text-lg font-bold">
+                          Monthly Financial Trend
+                        </h3>
+
+                        <p className="mt-1 text-sm text-gray-500">
+                          Income and expenses over the last
+                          six months
+                        </p>
+                      </div>
+
+                      <div className="rounded-lg bg-[#eef4ef] px-3 py-2 text-xs font-medium text-[#173b2a]">
+                        Last 6 months
+                      </div>
+
+                    </div>
+
+                    <div className="mt-6 h-80">
+                      <Line
+                        data={monthlyTrendChartData}
+                        options={lineChartOptions}
+                      />
+                    </div>
+
+                  </div>
+
                 </div>
 
                 {/* ================= TRANSACTIONS ================= */}

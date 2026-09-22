@@ -1,6 +1,28 @@
 const API_BASE_URL = "http://127.0.0.1:8000/api";
 
 // =====================================================
+// Dashboard Analytics Types
+// =====================================================
+
+export type DashboardAnalytics = {
+    income_vs_expense: {
+        income: number;
+        expenses: number;
+    };
+
+    expense_by_category: {
+        category: string;
+        amount: number;
+    }[];
+
+    monthly_trend: {
+        month: string;
+        income: number;
+        expenses: number;
+    }[];
+};
+
+// =====================================================
 // Dashboard Types
 // =====================================================
 
@@ -26,6 +48,9 @@ export type DashboardData = {
         wants_spent: number;
         savings_amount: number;
     };
+
+    // Dashboard Analytics
+    analytics: DashboardAnalytics;
 
     savings_goals: {
         id: number;
