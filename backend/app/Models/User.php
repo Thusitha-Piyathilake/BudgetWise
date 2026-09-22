@@ -70,4 +70,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(SavingsGoal::class);
     }
+
+    /**
+     * Get the recurring transactions belonging to the user.
+     */
+    public function recurringTransactions(): HasMany
+    {
+        return $this->hasMany(RecurringTransaction::class);
+    }
 }

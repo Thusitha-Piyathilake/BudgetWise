@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\RecurringTransactionController;
 use App\Http\Controllers\IncomeController;
 use App\Http\Controllers\ExpenseController;
 use App\Http\Controllers\BudgetController;
@@ -79,6 +80,18 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('/expenses', [ExpenseController::class, 'store']);
     Route::put('/expenses/{expense}', [ExpenseController::class, 'update']);
     Route::delete('/expenses/{expense}', [ExpenseController::class, 'destroy']);
+
+    /*
+    |--------------------------------------------------------------------------
+    | Recurring Transaction Routes
+    |--------------------------------------------------------------------------
+    */
+
+    Route::get('/recurring-transactions', [RecurringTransactionController::class, 'index']);
+    Route::post('/recurring-transactions', [RecurringTransactionController::class, 'store']);
+    Route::put('/recurring-transactions/{recurringTransaction}', [RecurringTransactionController::class, 'update']);
+    Route::delete('/recurring-transactions/{recurringTransaction}', [RecurringTransactionController::class, 'destroy']);
+    Route::patch('/recurring-transactions/{recurringTransaction}/toggle', [RecurringTransactionController::class, 'toggle']);
 
     /*
     |--------------------------------------------------------------------------

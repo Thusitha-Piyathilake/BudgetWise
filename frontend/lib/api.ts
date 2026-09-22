@@ -190,6 +190,46 @@ export type SingleSavingsGoalResponse = {
 };
 
 // =====================================================
+// Recurring Transaction Types
+// =====================================================
+
+export type RecurringTransaction = {
+    id: number;
+    user_id: number;
+    category_id: number | null;
+
+    type: "income" | "expense";
+
+    amount: string;
+
+    description: string | null;
+
+    source: string | null;
+
+    frequency: "daily" | "weekly" | "monthly" | "yearly";
+
+    start_date: string;
+
+    next_occurrence: string;
+
+    is_active: boolean;
+
+    category?: Category | null;
+
+    created_at?: string;
+    updated_at?: string;
+};
+
+export type RecurringTransactionResponse = {
+    recurring_transactions: RecurringTransaction[];
+};
+
+export type SingleRecurringTransactionResponse = {
+    message: string;
+    recurring_transaction: RecurringTransaction;
+};
+
+// =====================================================
 // Common Response Types
 // =====================================================
 
@@ -511,6 +551,81 @@ export async function deleteSavingsGoal(
         `/savings-goals/${id}`,
         {
             method: "DELETE",
+        }
+    );
+}
+
+// =====================================================
+// Recurring Transaction API
+// =====================================================
+
+export async function getRecurringTransactions(): Promise<RecurringTransactionResponse> {
+    return apiRequest<RecurringTransactionResponse>(
+        "/recurring-transactions"
+    );
+}
+
+export async function createRecurringTransaction(data: {
+    category_id?: number | null;
+    type: "income" | "expense";
+    amount: number;
+    description?: string | null;
+    source?: string | null;
+    frequency: "daily" | "weekly" | "monthly" | "yearly";
+    start_date: string;
+    next_occurrence: string;
+    is_active?: boolean;
+}): Promise<SingleRecurringTransactionResponse> {
+    return apiRequest<SingleRecurringTransactionResponse>(
+        "/recurring-transactions",
+        {
+            method: "POST",
+            body: JSON.stringify(data),
+        }
+    );
+}
+
+export async function updateRecurringTransaction(
+    id: number,
+    data: {
+        category_id?: number | null;
+        type: "income" | "expense";
+        amount: number;
+        description?: string | null;
+        source?: string | null;
+        frequency: "daily" | "weekly" | "monthly" | "yearly";
+        start_date: string;
+        next_occurrence: string;
+        is_active: boolean;
+    }
+): Promise<SingleRecurringTransactionResponse> {
+    return apiRequest<SingleRecurringTransactionResponse>(
+        `/recurring-transactions/${id}`,
+        {
+            method: "PUT",
+            body: JSON.stringify(data),
+        }
+    );
+}
+
+export async function deleteRecurringTransaction(
+    id: number
+): Promise<DeleteResponse> {
+    return apiRequest<DeleteResponse>(
+        `/recurring-transactions/${id}`,
+        {
+            method: "DELETE",
+        }
+    );
+}
+
+export async function toggleRecurringTransaction(
+    id: number
+): Promise<SingleRecurringTransactionResponse> {
+    return apiRequest<SingleRecurringTransactionResponse>(
+        `/recurring-transactions/${id}/toggle`,
+        {
+            method: "PATCH",
         }
     );
 }

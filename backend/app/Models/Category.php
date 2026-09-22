@@ -23,4 +23,9 @@ class Category extends Model
     {
         return $this->hasMany(Expense::class);
     }
+
+    public function recurringTransactions(): HasMany
+    {
+        return $this->hasMany(RecurringTransaction::class);
+    }
 }
