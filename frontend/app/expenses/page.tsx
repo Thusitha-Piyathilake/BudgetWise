@@ -478,42 +478,50 @@ export default function ExpensesPage() {
 
                 {/* Category */}
                 <div>
-                  <label
-                    htmlFor="category"
-                    className="mb-2 block text-sm font-medium text-gray-700"
-                  >
-                    Category
-                  </label>
+  <div className="mb-2 flex items-center justify-between">
+    <label
+      htmlFor="category"
+      className="block text-sm font-medium text-gray-700"
+    >
+      Category
+    </label>
 
-                  <select
-                    id="category"
-                    value={categoryId}
-                    onChange={(event) =>
-                      setCategoryId(
-                        event.target.value
-                      )
-                    }
-                    required
-                    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-[#173b2a] focus:ring-2 focus:ring-[#173b2a]/10"
-                  >
-                    <option value="">
-                      Select a category
-                    </option>
+    <button
+      type="button"
+      onClick={() => router.push("/categories")}
+      className="text-xs font-semibold text-[#173b2a] transition hover:underline"
+    >
+      + Add Category
+    </button>
+  </div>
 
-                    {categories.map((category) => (
-                      <option
-                        key={category.id}
-                        value={category.id}
-                      >
-                        {category.name} (
-                        {category.type === "need"
-                          ? "Need"
-                          : "Want"}
-                        )
-                      </option>
-                    ))}
-                  </select>
-                </div>
+  <select
+    id="category"
+    value={categoryId}
+    onChange={(event) =>
+      setCategoryId(event.target.value)
+    }
+    required
+    className="w-full rounded-xl border border-gray-200 bg-white px-4 py-3 text-sm text-black outline-none transition focus:border-[#173b2a] focus:ring-2 focus:ring-[#173b2a]/10"
+  >
+    <option value="">
+      Select a category
+    </option>
+
+    {categories.map((category) => (
+      <option
+        key={category.id}
+        value={category.id}
+      >
+        {category.name} (
+        {category.type === "need"
+          ? "Need"
+          : "Want"}
+        )
+      </option>
+    ))}
+  </select>
+</div>
 
                 {/* Description */}
                 <div>
