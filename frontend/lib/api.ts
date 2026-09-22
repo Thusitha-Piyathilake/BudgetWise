@@ -141,6 +141,30 @@ export type SingleBudgetResponse = {
 };
 
 // =====================================================
+// Savings Goal Types
+// =====================================================
+
+export type SavingsGoal = {
+    id: number;
+    user_id: number;
+    name: string;
+    target_amount: string;
+    current_amount: string;
+    target_date: string | null;
+    created_at?: string;
+    updated_at?: string;
+};
+
+export type SavingsGoalResponse = {
+    savings_goals: SavingsGoal[];
+};
+
+export type SingleSavingsGoalResponse = {
+    message: string;
+    savings_goal: SavingsGoal;
+};
+
+// =====================================================
 // Common Response Types
 // =====================================================
 
@@ -403,6 +427,60 @@ export async function deleteBudget(
 ): Promise<DeleteResponse> {
     return apiRequest<DeleteResponse>(
         `/budgets/${id}`,
+        {
+            method: "DELETE",
+        }
+    );
+}
+
+// =====================================================
+// Savings Goal API
+// =====================================================
+
+export async function getSavingsGoals(): Promise<SavingsGoalResponse> {
+    return apiRequest<SavingsGoalResponse>(
+        "/savings-goals"
+    );
+}
+
+export async function createSavingsGoal(data: {
+    name: string;
+    target_amount: number;
+    current_amount?: number;
+    target_date?: string;
+}): Promise<SingleSavingsGoalResponse> {
+    return apiRequest<SingleSavingsGoalResponse>(
+        "/savings-goals",
+        {
+            method: "POST",
+            body: JSON.stringify(data),
+        }
+    );
+}
+
+export async function updateSavingsGoal(
+    id: number,
+    data: {
+        name: string;
+        target_amount: number;
+        current_amount: number;
+        target_date?: string;
+    }
+): Promise<SingleSavingsGoalResponse> {
+    return apiRequest<SingleSavingsGoalResponse>(
+        `/savings-goals/${id}`,
+        {
+            method: "PUT",
+            body: JSON.stringify(data),
+        }
+    );
+}
+
+export async function deleteSavingsGoal(
+    id: number
+): Promise<DeleteResponse> {
+    return apiRequest<DeleteResponse>(
+        `/savings-goals/${id}`,
         {
             method: "DELETE",
         }

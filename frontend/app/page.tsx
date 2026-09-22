@@ -227,6 +227,11 @@ export default function Home() {
                   if (item === "Budget") {
                     router.push("/budget");
                   }
+
+                  // UPDATED: Savings navigation
+                  if (item === "Savings") {
+                    router.push("/savings");
+                  }
                 }}
                 className={`flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left text-sm font-medium transition ${
                   activeMenu === item
@@ -405,7 +410,8 @@ export default function Home() {
                         </p>
                       </div>
 
-                      {/* UPDATED: Manage button */}
+                      {/* Manage button */}
+
                       <button
                         type="button"
                         onClick={() => {
@@ -561,7 +567,16 @@ export default function Home() {
 
                     </div>
 
-                    <button className="mt-8 w-full rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#173b2a] hover:bg-gray-100">
+                    {/* UPDATED: View Savings Goals navigation */}
+
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setActiveMenu("Savings");
+                        router.push("/savings");
+                      }}
+                      className="mt-8 w-full rounded-xl bg-white px-4 py-3 text-sm font-semibold text-[#173b2a] hover:bg-gray-100"
+                    >
                       View Savings Goals
                     </button>
 
